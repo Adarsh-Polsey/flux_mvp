@@ -77,4 +77,5 @@ class DefaultFirebaseOptions {
     storageBucket: 'fluxmvp-219d4.firebasestorage.app',
     iosBundleId: 'com.example.fluxMvp',
   );
+
 }

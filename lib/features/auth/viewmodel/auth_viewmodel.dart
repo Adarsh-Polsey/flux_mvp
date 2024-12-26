@@ -16,13 +16,25 @@ class AuthViewmodel extends _$AuthViewmodel {
 
   Future<void> signup(String name, String email, String password) async {
     state = const AsyncValue.loading();
-    final val = await _authServiceRepository.signup(email,password);
-        log("🟢Signup - $val");
+    try {
+      final val = await _authServiceRepository.signup(name, email, password);
+      state = AsyncValue.data(val);
+      log("🟢Signup - $val");
+    } catch (e, s) {
+      state = AsyncValue.error(e.toString(), s);
+      log("🔴Signup - Error - $e");
+    }
   }
 
   Future<void> login(String email, String password) async {
-    state = const AsyncValue.loading();
-    final val = await _authServiceRepository.login(email, password);
-    log("🟢login - $val");
+    try {
+      state = const AsyncValue.loading();
+      final val = await _authServiceRepository.login(email, password);
+      state = AsyncValue.data(val);
+      log("🟢login - $val");
+    } catch (e, s) {
+      state = AsyncValue.error(e.toString(), s);
+      log("🔴login - Error - $e");
+    }
   }
 }

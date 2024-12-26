@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flux_mvp/core/app_pallete.dart';
 import 'package:flux_mvp/features/auth/viewmodel/auth_viewmodel.dart';
-import 'package:flux_mvp/shared/utils/snack_bar_message.dart';
+import 'package:flux_mvp/shared/utils/toast_notifier.dart';
 import 'package:flux_mvp/shared/widgets/custom_button.dart';
 import 'package:flux_mvp/shared/widgets/custom_textfield.dart';
 
@@ -33,15 +33,15 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
     ref.listen(authViewmodelProvider, (prev, next) {
       next?.when(
           data: (user) {
-            showSnackBarMessage(context, Text("Welcome! ${user.name}"));
             Navigator.pushReplacementNamed(context, '/login');
           },
           error: (e, s) {
-            showSnackBarMessage(context, Text(e.toString()));
+            notifier(e.toString(), status: 'error');
           },
           loading: () {});
     });
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       appBar: AppBar(),
       body: Padding(
         padding: const EdgeInsets.all(20.0),

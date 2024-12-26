@@ -1,5 +1,9 @@
+import 'dart:developer';
+
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flux_mvp/features/auth/models/user_model.dart';
 import 'package:flux_mvp/shared/utils/toast_notifier.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 part 'auth_service_repository.g.dart';
@@ -13,39 +17,57 @@ class AuthServiceRepository {
 // instance of FirebaseAuth
   final FirebaseAuth _auth = FirebaseAuth.instance;
 // Sign in
-  Future<bool> login(String email, String pass) async {
+  Future<UserModel> login(String email, String password) async {
     try {
-      await _auth.signInWithEmailAndPassword(email: email, password: pass);
-      bool verified = _auth.currentUser?.emailVerified ?? false;
-      if (verified) {
-        notifier("Welcome back!", status: "success");
-      } else {
-        notifier(
-            "Provided mail hasn't been verified yet, check your mail for a verification link", status: "info");
-        _auth.currentUser?.sendEmailVerification();
-      }
-      return verified;
+      await _auth.signInWithEmailAndPassword(email: email, password: password);
+      return (await getUserfromDb(email));
     } on FirebaseAuthException catch (e) {
       handleFirebaseAuthError(e);
-      return false;
+      rethrow;
     }
   }
 
 //Sign up
-  Future<bool> signup(String email, String pass) async {
+  Future<UserModel> signup(String name, String email, String password) async {
     try {
       UserCredential userCredential = await _auth
-          .createUserWithEmailAndPassword(email: email, password: pass);
-      userCredential.user?.sendEmailVerification();
-      return true;
+          .createUserWithEmailAndPassword(email: email, password: password);
+      userCredential;
+      return (await addUsertoDb(
+          UserModel(name: name, email: email, password: password)));
     } on FirebaseAuthException catch (e) {
       handleFirebaseAuthError(e);
-      throw Exception(e.code);
+      rethrow;
+    }
+  }
+
+  // Add user to database
+  Future<UserModel> addUsertoDb(UserModel user) async {
+    try {
+      final FirebaseFirestore db = FirebaseFirestore.instance;
+      final val = await db.collection('user').add(user.toMap());
+      log("Value - $val");
+      return user;
+    } on FirebaseException catch (e) {
+      throw Exception(e.message);
+    }
+  }
+
+// Get user from database
+  Future<UserModel> getUserfromDb(String email) async {
+    try {
+      final FirebaseFirestore db = FirebaseFirestore.instance;
+      final val =
+          await db.collection('user').where('email', isEqualTo: email).get();
+      log("Value ${val.docs.first.data()}");
+      return UserModel(name: "", email: email, password: "");
+    } on FirebaseException catch (e) {
+      throw Exception(e.message);
     }
   }
 
 //Firebase Sign out
-Future<void> fsignOut() async {
+  Future<void> fsignOut() async {
     await _auth.signOut();
   }
 
@@ -77,7 +99,8 @@ Future<void> fsignOut() async {
   void resetPassword(String mail) async {
     try {
       await _auth.sendPasswordResetEmail(email: mail);
-      notifier("Check your mail inbox for password updating link",status: "warning");
+      notifier("Check your mail inbox for password updating link",
+          status: "warning");
     } on FirebaseAuthException catch (e) {
       handleFirebaseAuthError(e);
     }
@@ -113,9 +136,8 @@ Future<void> fsignOut() async {
       errorMessage =
           'There have been too many failed sign-in attempts. Try again later.';
     } else {
-      notifier('An unknown error occurred: ${error.code}', status: "error");
+      errorMessage = 'An unknown error occurred: ${error.message}';
     }
-    notifier(errorMessage,status: "error");
+    throw Exception(errorMessage);
   }
 }
-

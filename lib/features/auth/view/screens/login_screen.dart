@@ -1,6 +1,7 @@
 import 'package:flux_mvp/core/app_pallete.dart';
 import 'package:flux_mvp/features/auth/viewmodel/auth_viewmodel.dart';
 import 'package:flux_mvp/shared/utils/snack_bar_message.dart';
+import 'package:flux_mvp/shared/utils/toast_notifier.dart';
 import 'package:flux_mvp/shared/widgets/custom_button.dart';
 import 'package:flux_mvp/shared/widgets/custom_textfield.dart';
 import 'package:flutter/material.dart';
@@ -30,15 +31,16 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
     ref.listen(authViewmodelProvider, (prev, next) {
       next?.when(
           data: (user) {
-            showSnackBarMessage(context, Text("Welcome! ${user.name}"));
+            notifier("Welcome! ${user.name}", status: "success");
             Navigator.pushReplacementNamed(context, '/signup');
           },
           error: (e, s) {
-            showSnackBarMessage(context, Text(e.toString()));
+            notifier(e.toString(), status: 'error');
           },
           loading: () {});
     });
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       body: Padding(
         padding: const EdgeInsets.all(20.0),
         child: Form(
@@ -80,11 +82,13 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
               GestureDetector(
                 onTap: () => Navigator.pushNamed(context, '/signup'),
                 child: RichText(
-                    text: const TextSpan(text: "Don't have an account? ", children: [
-                  TextSpan(
-                      text: "Sign up",
-                      style: TextStyle(color: Pallete.gradient1))
-                ])),
+                    text: const TextSpan(
+                        text: "Don't have an account? ",
+                        children: [
+                      TextSpan(
+                          text: "Sign up",
+                          style: TextStyle(color: Pallete.gradient1))
+                    ])),
               )
             ],
           ),
