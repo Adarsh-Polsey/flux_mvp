@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flux_mvp/core/app_pallete.dart';
-import 'package:flux_mvp/features/nav_screens/view/home_screen.dart';
-import 'package:flux_mvp/features/nav_screens/view/profile_screen.dart';
+import 'package:flux_mvp/features/nav_screens/view/screens/home_screen.dart';
+import 'package:flux_mvp/features/nav_screens/view/screens/profile_screen.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
 
 class BottomNavBar extends StatefulWidget {
