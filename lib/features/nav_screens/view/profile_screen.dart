@@ -16,252 +16,247 @@ class ProfileScreen extends ConsumerStatefulWidget {
 
 class _ProfileScreenState extends ConsumerState<ProfileScreen> {
   final _formKey = GlobalKey<FormState>();
-  String email = "";
-  String name = "";
-  String website = "";
-  String phone = "";
-  String company = "";
-  String tagLine = "";
-  String address = "";
+  final _emailController = TextEditingController();
+  final _nameController = TextEditingController();
+  final _websiteController = TextEditingController();
+  final _phoneController = TextEditingController();
+  final _companyController = TextEditingController();
+  final _taglineController = TextEditingController();
+  final _addressController = TextEditingController();
+
   bool readOnly = true;
 
   @override
   void initState() {
     super.initState();
-    // ref.read(completeProfileViewmodelProvider.notifier).getProfileDetails();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      ref.read(completeProfileViewmodelProvider.notifier).getProfileDetails();
+    });
+  }
+
+  @override
+  void dispose() {
+    _emailController.dispose();
+    _nameController.dispose();
+    _websiteController.dispose();
+    _phoneController.dispose();
+    _companyController.dispose();
+    _taglineController.dispose();
+    _addressController.dispose();
+    super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     final isLoading =
         ref.watch(completeProfileViewmodelProvider)?.isLoading ?? false;
+
     ref.listen(completeProfileViewmodelProvider, (prev, next) {
       next?.when(
-          data: (val) {
-            setState(() {
-              email = val["email"];
-              name = val["name"];
-              website = val["website"];
-              phone = val["phone"];
-              company = val["company"];
-              tagLine = val["tagline"];
-              address = val["address"];
-            });
-          },
-          error: (e, s) {
-            notifier("Error occured, please try again", status: "error");
-          },
-          loading: () {});
+        data: (val) {
+          _emailController.text = val["email"] ?? "";
+          _nameController.text = val["name"] ?? "";
+          _websiteController.text = val["website"] ?? "";
+          _phoneController.text = val["phone"] ?? "";
+          _companyController.text = val["company"] ?? "";
+          _taglineController.text = val["tagline"] ?? "";
+          _addressController.text = val["address"] ?? "";
+        },
+        error: (e, s) {
+          notifier("Error occurred, please try again", status: "error");
+        },
+        loading: () {},
+      );
     });
+
     return Scaffold(
-        appBar: AppBar(
-          toolbarHeight: 60,
-          scrolledUnderElevation: 0,
-          backgroundColor: Colors.transparent,
-          centerTitle: true,
-          title: const Text(
-            "Edit profile",
-            style: TextStyle(fontWeight: FontWeight.w500),
-          ),
+      appBar: AppBar(
+        toolbarHeight: 60,
+        scrolledUnderElevation: 0,
+        backgroundColor: Colors.transparent,
+        centerTitle: true,
+        title: const Text(
+          "Manage Profile",
+          style: TextStyle(fontWeight: FontWeight.w500),
         ),
-        body: isLoading
-            ? const Center(child: CircularProgressIndicator())
-            : SingleChildScrollView(
-                padding: const EdgeInsets.symmetric(horizontal: 35),
-                physics: const BouncingScrollPhysics(),
-                scrollDirection: Axis.vertical,
-                child: Column(children: [
+      ),
+      body: isLoading
+          ? const Center(child: CircularProgressIndicator())
+          : SingleChildScrollView(
+              padding: const EdgeInsets.symmetric(horizontal: 35),
+              physics: const BouncingScrollPhysics(),
+              child: Column(
+                children: [
                   const SizedBox(height: 20),
-                  //Form visibility - Visible if the user is not a superuser
                   Form(
                     key: _formKey,
-                    child: ListView(
-                      scrollDirection: Axis.vertical,
-                      physics: const NeverScrollableScrollPhysics(),
-                      shrinkWrap: true,
+                    child: Column(
                       children: [
-                        // website
                         CustomField(
-                          initialValue: website,
-                          title: "Website: ",
+                          controller: _websiteController,
+                          title: "Website",
                           readOnly: readOnly,
-                          onSaved: (value) {
-                            setState(() {
-                              website = value!;
-                            });
-                          },
-                          prefixIcon: const Icon(Icons.person_2_outlined),
-                        ),
-                        const SizedBox(height: 5),
-// phone field
-                        CustomField(
-                          initialValue: phone,
-                          title: "Phone no: ",
-                          readOnly: readOnly,
-                          validator: (value) {
-                            if (value == null || value.isEmpty) {
-                              return "Please enter your phone number";
-                            }
-                            return null;
-                          },
-                          onSaved: (value) {
-                            setState(() {
-                              phone = value!;
-                            });
-                          },
-                          prefixIcon: const Icon(Icons.person_2_outlined),
-                        ),
-                        const SizedBox(height: 5),
-// company name
-                        CustomField(
-                          initialValue: company,
-                          title: "Company name: ",
-                          readOnly: readOnly,
-                          validator: (value) {
-                            if (value == null || value.isEmpty) {
-                              return "Please enter your company name";
-                            }
-                            return null;
-                          },
-                          onSaved: (value) {
-                            setState(() {
-                              company = value!;
-                            });
-                          },
-                          prefixIcon: const Icon(Icons.person_2_outlined),
-                        ),
-                        const SizedBox(height: 5),
-// company tag line
-                        CustomField(
-                          initialValue: tagLine,
-                          title: "Company tag line: ",
-                          readOnly: readOnly,
-                          onSaved: (value) {
-                            setState(() {
-                              tagLine = value!;
-                            });
-                          },
-                          prefixIcon: const Icon(Icons.person_2_outlined),
-                        ),
-                        const SizedBox(height: 5),
-// Street address
-                        CustomField(
-                          initialValue: phone,
-                          title: "Address: ",
-                          readOnly: readOnly,
-                          onSaved: (value) {
-                            setState(() {
-                              address = value!;
-                            });
-                          },
-                          prefixIcon: const Icon(Icons.person_2_outlined),
+                          onSaved: (value) => _websiteController.text = value!,
                         ),
                         const SizedBox(height: 10),
-// Button
+                        CustomField(
+                          controller: _phoneController,
+                          title: "Phone Number",
+                          readOnly: readOnly,
+                          validator: (value) => value == null || value.isEmpty
+                              ? "Please enter your phone number"
+                              : null,
+                          onSaved: (value) => _phoneController.text = value!,
+                        ),
+                        const SizedBox(height: 10),
+                        CustomField(
+                          controller: _companyController,
+                          title: "Company Name",
+                          readOnly: readOnly,
+                          validator: (value) => value == null || value.isEmpty
+                              ? "Please enter your company name"
+                              : null,
+                          onSaved: (value) => _companyController.text = value!,
+                        ),
+                        const SizedBox(height: 10),
+                        CustomField(
+                          controller: _taglineController,
+                          title: "Tagline",
+                          readOnly: readOnly,
+                          onSaved: (value) => _taglineController.text = value!,
+                        ),
+                        const SizedBox(height: 10),
+                        CustomField(
+                          controller: _addressController,
+                          title: "Address",
+                          readOnly: readOnly,
+                          onSaved: (value) => _addressController.text = value!,
+                        ),
+                        const SizedBox(height: 20),
                         OutlinedButton(
-                            onPressed: () async {
-                              setState(() {
-                                readOnly = !readOnly;
-                              });
-                              if (readOnly) {
-                                if (_formKey.currentState!.validate()) {
-                                  _formKey.currentState!.save();
-                                  log("🔥To map = ${ProfileModel(company: company, website: website, phone: phone, tagline: tagLine, address: address).toMap()}");
-                                  ref
-                                      .read(completeProfileViewmodelProvider
-                                          .notifier)
-                                      .completeProfile(ProfileModel(
-                                              company: company,
-                                              website: website,
-                                              phone: phone,
-                                              tagline: tagLine,
-                                              address: address)
-                                          .toMap());
-                                }
+                          onPressed: () {
+                            setState(() {
+                              readOnly = !readOnly;
+                            });
+                            if (readOnly) {
+                              if (_formKey.currentState!.validate()) {
+                                _formKey.currentState!.save();
+                                final profile = ProfileModel(
+                                  company: _companyController.text,
+                                  website: _websiteController.text,
+                                  phone: _phoneController.text,
+                                  tagline: _taglineController.text,
+                                  address: _addressController.text,
+                                );
+                                log("🔥 Profile to update: ${profile.toMap()}");
+                                ref
+                                    .read(completeProfileViewmodelProvider
+                                        .notifier)
+                                    .completeProfile(profile.toMap());
                               }
-                            },
-                            style: OutlinedButton.styleFrom(
-                              side: const BorderSide(color: Colors.green),
-                              shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(10)),
-                              fixedSize: const Size(double.infinity, 50),
+                            }
+                          },
+                          style: OutlinedButton.styleFrom(
+                            side: const BorderSide(color: Colors.green),
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(10)),
+                            fixedSize: const Size(double.infinity, 50),
+                          ),
+                          child: Center(
+                            child: Text(
+                              readOnly ? "Edit Profile" : "Save",
+                              style: const TextStyle(
+                                fontSize: 18,
+                                fontWeight: FontWeight.bold,
+                                color: Pallete.greenColor,
+                              ),
                             ),
-                            child: Center(
-                                child: Text(
-                                    (readOnly ? "Edit profile" : "Save"),
-                                    style: const TextStyle(
-                                        fontSize: 18,
-                                        fontWeight: FontWeight.bold,
-                                        color: Pallete.greenColor)))),
+                          ),
+                        ),
                       ],
                     ),
                   ),
-                  const SizedBox(height: 30)
-                ]),
-              ));
+                ],
+              ),
+            ),
+    );
   }
 }
 
-class CustomField extends StatelessWidget {
+class CustomField extends StatefulWidget {
   const CustomField({
     super.key,
+    required this.controller,
     this.onSaved,
     this.validator,
     this.title = "",
-    this.initialValue = "",
-    this.prefixIcon,
     this.readOnly = false,
   });
+
+  final TextEditingController controller;
   final void Function(String?)? onSaved;
   final String? Function(String?)? validator;
   final String title;
-  final String initialValue;
-  final Widget? prefixIcon;
   final bool readOnly;
+
+  @override
+  State<CustomField> createState() => _CustomFieldState();
+}
+
+class _CustomFieldState extends State<CustomField> {
+  // Create a FocusNode to track the focus state
+  final FocusNode _focusNode = FocusNode();
+
+  @override
+  void initState() {
+    super.initState();
+    // Add listener to track focus state changes
+    _focusNode.addListener(() {
+      setState(() {});
+    });
+  }
+
+  @override
+  void dispose() {
+    _focusNode.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        const SizedBox(height: 2.5),
-        Text(
-          title,
-          style: TextStyle(
-              fontWeight: FontWeight.w600,
-              fontSize: 14,
-              color: !readOnly ? Pallete.greenColor : Pallete.greyColor),
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 8.0),
+      child: TextFormField(
+        controller: widget.controller,
+        focusNode: _focusNode,
+        readOnly: widget.readOnly,
+        style: TextStyle(
+          color: _focusNode.hasFocus ? Pallete.greenColor : Pallete.greyColor,
+          fontSize: 16,
         ),
-        const SizedBox(
-          height: 5,
+        decoration: InputDecoration(
+          labelStyle: TextStyle(
+            color: _focusNode.hasFocus ? Pallete.greenColor : Pallete.greyColor,
+          ),
+          labelText: widget.title,
+          hintText: widget.title,
+          floatingLabelBehavior: FloatingLabelBehavior.always,
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(10),
+            borderSide: const BorderSide(color: Pallete.greyColor),
+          ),
+          enabledBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(10),
+            borderSide: const BorderSide(color: Pallete.greyColor),
+          ),
+          focusedBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(10),
+            borderSide: BorderSide(color: Pallete.greenColor.withOpacity(0.5)),
+          ),
         ),
-        TextFormField(
-            readOnly: readOnly,
-            style: TextStyle(
-                color: !readOnly ? Pallete.greenColor : Pallete.greyColor,
-                fontSize: 16),
-            initialValue: initialValue,
-            decoration: InputDecoration(
-              hintText: title.replaceAll(":", ""),
-              floatingLabelBehavior: FloatingLabelBehavior.always,
-              prefixIcon: prefixIcon,
-              prefixIconColor: Pallete.greyColor,
-              labelStyle:
-                  const TextStyle(color: Pallete.greyColor, fontSize: 10),
-              hintStyle: const TextStyle(color: Pallete.greyColor),
-              border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(0),
-                  borderSide: const BorderSide(color: Pallete.greyColor)),
-              enabledBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(10),
-                  borderSide: const BorderSide(color: Pallete.greyColor)),
-              focusedBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(0),
-                  borderSide: const BorderSide(color: Pallete.greyColor)),
-            ),
-            validator: validator,
-            onSaved: onSaved),
-        const SizedBox(height: 2.5),
-      ],
+        validator: widget.validator,
+        onSaved: widget.onSaved,
+      ),
     );
   }
 }
