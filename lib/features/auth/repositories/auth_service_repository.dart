@@ -20,6 +20,7 @@ class AuthServiceRepository {
   Future<UserModel> login(String email, String password) async {
     try {
       await _auth.signInWithEmailAndPassword(email: email, password: password);
+      log("Value - $email");
       return (await getUserfromDb(email));
     } on FirebaseAuthException catch (e) {
       handleFirebaseAuthError(e);

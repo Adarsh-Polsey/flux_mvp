@@ -4,6 +4,8 @@ import 'package:flux_mvp/core/theme.dart';
 import 'package:flux_mvp/features/auth/view/screens/login_screen.dart';
 import 'package:flux_mvp/features/auth/view/screens/signup_screen.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:flux_mvp/features/nav_screens/view/home_screen.dart';
+import 'package:flux_mvp/features/splashscreen/view/splash_screen.dart';
 import 'package:flux_mvp/firebase_options.dart';
 import 'package:toastification/toastification.dart';
 
@@ -21,10 +23,12 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
         routes: {
+          "/splash": (context) => const SplashScreen(),
           "/signup": (context) => const SignupScreen(),
-          "/login": (context) => const LoginScreen()
+          "/login": (context) => const LoginScreen(),
+          "/home": (context) => const HomeScreen(),
         },
-        initialRoute: "/login",
+        initialRoute: "/splash",
         theme: AppTheme.darkThemeMode,
         debugShowCheckedModeBanner: false);
   }

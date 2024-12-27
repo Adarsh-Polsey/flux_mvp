@@ -10,6 +10,11 @@ class AppTheme {
         borderRadius: BorderRadius.circular(10),
       );
   static final darkThemeMode = ThemeData.dark().copyWith(
+    appBarTheme: const AppBarTheme(
+      backgroundColor: Pallete.backgroundColor,
+      elevation: 0,
+      iconTheme: IconThemeData(color: Pallete.whiteColor),
+    ),
     snackBarTheme: const SnackBarThemeData(
         backgroundColor: Pallete.backgroundColor,
         actionTextColor: Pallete.whiteColor,

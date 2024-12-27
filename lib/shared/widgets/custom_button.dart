@@ -3,10 +3,14 @@ import 'package:flux_mvp/core/app_pallete.dart';
 
 class GradientButton extends StatelessWidget {
   const GradientButton(
-      {super.key, required this.title, this.onPressed, this.widget});
+      {super.key, required this.title, this.onPressed, this.widget,this.gradient=const LinearGradient(colors: [
+            Pallete.gradient1,
+            Pallete.gradient2,
+          ])});
   final String title;
   final void Function()? onPressed;
   final Widget? widget;
+  final Gradient? gradient;
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -14,10 +18,7 @@ class GradientButton extends StatelessWidget {
       width: 395,
       decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(7),
-          gradient: const LinearGradient(colors: [
-            Pallete.gradient1,
-            Pallete.gradient2,
-          ])),
+          gradient: gradient),
       child: widget ??
           ElevatedButton(
             style: ElevatedButton.styleFrom(

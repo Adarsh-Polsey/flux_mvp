@@ -1,6 +1,5 @@
 import 'package:flux_mvp/core/app_pallete.dart';
 import 'package:flux_mvp/features/auth/viewmodel/auth_viewmodel.dart';
-import 'package:flux_mvp/shared/utils/snack_bar_message.dart';
 import 'package:flux_mvp/shared/utils/toast_notifier.dart';
 import 'package:flux_mvp/shared/widgets/custom_button.dart';
 import 'package:flux_mvp/shared/widgets/custom_textfield.dart';
@@ -32,7 +31,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
       next?.when(
           data: (user) {
             notifier("Welcome! ${user.name}", status: "success");
-            Navigator.pushReplacementNamed(context, '/signup');
+            Navigator.pushReplacementNamed(context, '/home');
           },
           error: (e, s) {
             notifier(e.toString(), status: 'error');
