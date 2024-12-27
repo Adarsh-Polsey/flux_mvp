@@ -1,7 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flux_mvp/features/auth/view/screens/login_screen.dart';
-import 'package:flux_mvp/features/nav_screens/view/home_screen.dart';
+import 'package:flux_mvp/features/nav_screens/view/bottom_nav_bar.dart';
 
 class SplashScreen extends StatelessWidget {
   const SplashScreen({super.key});
@@ -15,7 +15,7 @@ class SplashScreen extends StatelessWidget {
             builder: (context, snapshot) {
               // logged in
               if (snapshot.hasData) {
-                return const HomeScreen();
+                return const BottomNavBar();
               } else {
                 return const LoginScreen();
               }

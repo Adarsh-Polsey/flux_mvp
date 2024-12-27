@@ -35,7 +35,7 @@ class AuthServiceRepository {
           .createUserWithEmailAndPassword(email: email, password: password);
       userCredential;
       return (await addUsertoDb(
-          UserModel(name: name, email: email, password: password)));
+          UserModel(name: name, email: email, password: "")));
     } on FirebaseAuthException catch (e) {
       handleFirebaseAuthError(e);
       rethrow;

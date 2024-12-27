@@ -5,6 +5,7 @@ import 'package:flux_mvp/features/auth/view/screens/login_screen.dart';
 import 'package:flux_mvp/features/auth/view/screens/signup_screen.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flux_mvp/features/nav_screens/view/home_screen.dart';
+import 'package:flux_mvp/features/nav_screens/view/profile_screen.dart';
 import 'package:flux_mvp/features/splashscreen/view/splash_screen.dart';
 import 'package:flux_mvp/firebase_options.dart';
 import 'package:toastification/toastification.dart';
@@ -27,6 +28,7 @@ class MyApp extends StatelessWidget {
           "/signup": (context) => const SignupScreen(),
           "/login": (context) => const LoginScreen(),
           "/home": (context) => const HomeScreen(),
+          "/profile": (context) => const ProfileScreen(),
         },
         initialRoute: "/splash",
         theme: AppTheme.darkThemeMode,

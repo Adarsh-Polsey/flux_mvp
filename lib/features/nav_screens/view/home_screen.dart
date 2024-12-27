@@ -12,7 +12,6 @@ class HomeScreen extends StatelessWidget {
       appBar: AppBar(
         centerTitle: true,
         title: const Text("Flux cards"),
-        actions: [IconButton(onPressed: () {}, icon: const Icon(Icons.person))],
       ),
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 50.0),
