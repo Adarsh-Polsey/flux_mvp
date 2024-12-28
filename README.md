@@ -14,7 +14,8 @@ A mobile app that helps you to create and share business cards for your company
 - [x] Various templates for buiness cards
 - [x] One click creation
 
-#Screenshots
+# Screenshots
+
 ![Home](https://github.com/user-attachments/assets/7e995fc2-77d5-43ae-815b-bf53cd66676a)
 ![Profile](https://github.com/user-attachments/assets/268ffee6-5703-404d-8bdb-ce6afd6aa5ed)
 ![Template](https://github.com/user-attachments/assets/9a6b0795-b556-4290-a52d-b9a3b2fbf274)
