@@ -20,13 +20,17 @@ class HomeScreen extends StatelessWidget {
           children: [
             GradientButton(
               title: "Create cards",
-              onPressed: () {},
+              onPressed: () {
+                Navigator.pushNamed(context, '/template');
+              },
               gradient: gradient,
             ),
             const SizedBox(height: 20),
             GradientButton(
                 title: "View saved cards",
-                onPressed: () {},
+                onPressed: () {
+                  Navigator.pushNamed(context, '/view_cards');
+                },
                 gradient: gradient),
           ],
         ),

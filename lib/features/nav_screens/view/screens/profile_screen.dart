@@ -69,20 +69,20 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
       );
     });
 
-    return Scaffold(
-      appBar: AppBar(
-        toolbarHeight: 60,
-        scrolledUnderElevation: 0,
-        backgroundColor: Colors.transparent,
-        centerTitle: true,
-        title: const Text(
-          "Manage Profile",
-          style: TextStyle(fontWeight: FontWeight.w500),
-        ),
-      ),
-      body: isLoading
-          ? const Center(child: CircularProgressIndicator())
-          : SingleChildScrollView(
+    return isLoading
+        ? const Center(child: CircularProgressIndicator())
+        : Scaffold(
+            appBar: AppBar(
+              toolbarHeight: 60,
+              scrolledUnderElevation: 0,
+              backgroundColor: Colors.transparent,
+              centerTitle: true,
+              title: const Text(
+                "Manage Profile",
+                style: TextStyle(fontWeight: FontWeight.w500),
+              ),
+            ),
+            body: SingleChildScrollView(
               padding: const EdgeInsets.symmetric(horizontal: 35),
               physics: const BouncingScrollPhysics(),
               child: Column(
@@ -179,7 +179,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                 ],
               ),
             ),
-    );
+          );
   }
 }
 

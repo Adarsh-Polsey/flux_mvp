@@ -4,6 +4,9 @@ import 'package:flux_mvp/core/theme.dart';
 import 'package:flux_mvp/features/auth/view/screens/login_screen.dart';
 import 'package:flux_mvp/features/auth/view/screens/signup_screen.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:flux_mvp/features/business_card/view/screens/create_cards.dart';
+import 'package:flux_mvp/features/business_card/view/screens/template_screen.dart';
+import 'package:flux_mvp/features/business_card/view/screens/view_saved_cards.dart';
 import 'package:flux_mvp/features/nav_screens/view/screens/home_screen.dart';
 import 'package:flux_mvp/features/nav_screens/view/screens/profile_screen.dart';
 import 'package:flux_mvp/features/splashscreen/view/splash_screen.dart';
@@ -24,11 +27,17 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
         routes: {
+          // Auth screens
           "/splash": (context) => const SplashScreen(),
           "/signup": (context) => const SignupScreen(),
           "/login": (context) => const LoginScreen(),
+          // Navigation screens
           "/home": (context) => const HomeScreen(),
           "/profile": (context) => const ProfileScreen(),
+          // Card screens
+          '/template': (context) => const TemplateScreen(),
+          '/create_cards': (context) => const CreateCards(),
+          '/view_cards': (context) => const ViewSavedCards(),
         },
         initialRoute: "/splash",
         theme: AppTheme.darkThemeMode,

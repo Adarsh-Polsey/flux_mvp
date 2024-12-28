@@ -14,6 +14,7 @@ class CompleteProfileViewmodel extends _$CompleteProfileViewmodel {
   }
 
   Future<void> getProfileDetails() async {
+    state = const AsyncValue.loading();
     try {
       final val = await _completeProfileRepository.getProfileDetails();
       state = AsyncValue.data(val);
