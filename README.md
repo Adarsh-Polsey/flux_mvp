@@ -1,16 +1,15 @@
-# flux_mvp
+# Flux MVP
 
-A new Flutter project.
+A mobile app that helps you to create and share business cards for your company
 
-## Getting Started
+# Features
 
-This project is a starting point for a Flutter application.
-
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+- [x] authentication with Google Sign-in
+- [x] profile creation
+- [x] profile editing
+- [x] profile viewing
+- [x] profile deletion
+- [x] User can create, view, edit and delete their business cards
+- [x] User can share their business cards as Images through their socials
+- [x] Various templates for buiness cards
+- [x] One click creation
