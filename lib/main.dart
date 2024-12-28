@@ -1,3 +1,5 @@
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flux_mvp/core/theme.dart';
@@ -12,12 +14,19 @@ import 'package:flux_mvp/features/nav_screens/view/screens/profile_screen.dart';
 import 'package:flux_mvp/features/splashscreen/view/splash_screen.dart';
 import 'package:flux_mvp/firebase_options.dart';
 import 'package:toastification/toastification.dart';
-
+final FirebaseCrashlytics crashlyticsInstance = FirebaseCrashlytics.instance;
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
-
+  if (kDebugMode) {
+    await crashlyticsInstance.setCrashlyticsCollectionEnabled(false);
+    
+  } 
+  FlutterError.onError = crashlyticsInstance.recordFlutterFatalError;
+  FlutterError.onError = (FlutterErrorDetails details) {
+    FlutterError.dumpErrorToConsole(details);
+  };
   runApp(const ProviderScope(child: ToastificationWrapper(child: MyApp())));
 }
 
